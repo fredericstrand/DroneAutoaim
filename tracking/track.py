@@ -10,6 +10,13 @@ model = YOLO('yolov8s.pt')
 # Open webcam
 cap = cv.VideoCapture(0)
 
+arduino = serial.Serial('/dev/ttyACM0', 9600)
+time.sleep(2)
+
+# Frame size
+FRAME_WIDTH = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+FRAME_HEIGHT = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+
 while True:
     ret, frame = cap.read()
     if not ret:
@@ -28,6 +35,11 @@ while True:
             # Compute the center
             box_cx = (x1 + x2) // 2
             box_cy = (y1 + y2) // 2
+
+            x_angle = int((box_cx / FRAME_WIDTH) * 180)
+            y_angle = int((box_cy / FRAME_HEIGHT) * 180)
+
+            arduino.write(f"{x_angle},{y_angle}\n".encode())
 
             cv.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
             cv.putText(frame, label, (x1, y1 - 10), cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
