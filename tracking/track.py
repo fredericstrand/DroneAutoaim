@@ -11,7 +11,7 @@ servo_x = AngularServo(12, min_angle=-90, max_angle=90,
                        pin_factory=factory)
 
 # Load YOLOv8 model
-model = YOLO('yolov8s.pt')
+model = YOLO('yolov8n.pt')
 
 # Open the webcam
 cap = cv.VideoCapture(0)
